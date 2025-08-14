@@ -1,4 +1,5 @@
 <?php
+require_once "../../api/sessions.php";
 require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/Database.php';
 

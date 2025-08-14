@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once "../../api/sessions.php";
 require_once __DIR__ . '/../../config/cors.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
