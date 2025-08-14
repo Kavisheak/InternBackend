@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once "../../api/sessions.php";
 
 require_once '../../config/cors.php';
 require_once '../../config/Database.php';

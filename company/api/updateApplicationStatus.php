@@ -1,7 +1,7 @@
 <?php
 // filepath: c:\xampp\htdocs\InternBackend\company\api\updateApplicationStatus.php
 
-session_start();
+require_once "../../api/sessions.php";
 require_once __DIR__ . "/../../config/cors.php";
 require_once __DIR__ . "/../../config/Database.php";
 
