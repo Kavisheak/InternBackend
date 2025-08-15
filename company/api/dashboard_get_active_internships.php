@@ -30,12 +30,14 @@ $companyId = $company['Com_Id'];
 
 // Step 2: Fetch internships from Internship table
 $query = "SELECT 
-            Internship_Id AS id,
-            title,
-            deadline
-          FROM Internship
-          WHERE Company_Id = :company_id AND is_active = 1
-          ORDER BY created_at DESC";
+            i.Internship_Id AS id,
+            i.title,
+            i.deadline,
+            i.application_limit,
+            (SELECT COUNT(*) FROM application a WHERE a.Internship_Id = i.Internship_Id) AS application_count
+          FROM internship i
+          WHERE i.Company_Id = :company_id AND i.is_active = 1
+          ORDER BY i.created_at DESC";
 
 $stmt = $db->prepare($query);
 $stmt->bindParam(':company_id', $companyId);
