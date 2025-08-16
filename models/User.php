@@ -59,4 +59,16 @@ class User {
 
         return false;
     }
+
+    public function getTotalUsers() {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM " . $this->table);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
+
+    public function getSuspendedUsers() {
+        $stmt = $this->conn->prepare("SELECT COUNT(*) as suspended FROM " . $this->table . " WHERE is_active=0");
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC)['suspended'];
+    }
 }
