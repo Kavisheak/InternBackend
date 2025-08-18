@@ -9,6 +9,7 @@ try {
     $db = (new Database())->getConnection();
 
     // Get all internships that are active and not expired
+    // Show most recently posted or recently updated (by company) on top
     $stmt = $db->prepare("
         SELECT 
             i.Internship_Id AS id,
@@ -22,7 +23,9 @@ try {
             i.deadline,
             i.application_limit,
             i.Company_Id,
-            c.company_name AS company
+            c.company_name AS company,
+            i.created_at,
+            i.updated_at
         FROM internship i
         JOIN company c ON i.Company_Id = c.Com_Id
         WHERE i.is_active = 1 AND i.deadline >= CURDATE()
@@ -44,8 +47,23 @@ try {
             $application_count < (int)$internship['application_limit']
         ) {
             $internship['application_count'] = $application_count;
+            // Use the most recent of created_at or updated_at for sorting
+            $internship['sort_time'] = max(
+                strtotime($internship['created_at']),
+                strtotime($internship['updated_at'] ?? $internship['created_at'])
+            );
             $result[] = $internship;
         }
+    }
+
+    // Sort by sort_time DESC (most recently posted or updated by company first)
+    usort($result, function($a, $b) {
+        return $b['sort_time'] <=> $a['sort_time'];
+    });
+
+    // Remove sort_time from output
+    foreach ($result as &$internship) {
+        unset($internship['sort_time']);
     }
 
     echo json_encode([
