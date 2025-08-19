@@ -2,64 +2,75 @@
 // filepath: c:\xampp\htdocs\InternBackend\company\api\applications.php
 
 require_once "../../api/sessions.php";
-require_once __DIR__ . "/../../config/cors.php";
-require_once __DIR__ . "/../../config/Database.php";
+require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../../config/cors.php';
 
 header("Content-Type: application/json");
 
 // Check if company is logged in
-if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'company') {
-    http_response_code(401);
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'company') {
     echo json_encode(["success" => false, "message" => "Unauthorized"]);
     exit;
 }
 
-// Get company id from session
-$userId = $_SESSION['user_id'];
-try {
-    $db = (new Database())->getConnection();
-    // Get company id from company table using user_id
-    $stmt = $db->prepare("SELECT Com_Id FROM company WHERE User_Id = ?");
-    $stmt->execute([$userId]);
-    $company = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$company) {
-        http_response_code(403);
-        echo json_encode(["success" => false, "message" => "Company not found"]);
-        exit;
-    }
-    $companyId = $company['Com_Id'];
+$db = (new Database())->getConnection();
 
-    // Fetch all applications for this company, join student, internship, users, and skills
-    $sql = "
-        SELECT
-            a.Application_Id AS id,
-            CONCAT(s.fname, ' ', s.lname) AS name,
-            s.gender,
-            i.title AS role,
-            DATE_FORMAT(a.applied_date, '%Y-%m-%d') AS applied,
-            s.education,
-            s.experience,
-            GROUP_CONCAT(sk.skill_name SEPARATOR ', ') AS skills,
-            u.email,
-            s.phone,
-            s.profile_img AS image,
-            s.cv_file AS cv,
-            a.status
-        FROM application a
-        JOIN internship i ON a.Internship_Id = i.Internship_Id
-        JOIN student s ON a.Student_Id = s.Student_Id
-        JOIN users u ON s.User_Id = u.User_Id
-        LEFT JOIN skill sk ON sk.Student_Id = s.Student_Id
-        WHERE i.Company_Id = ?
-        GROUP BY a.Application_Id
-        ORDER BY a.applied_date DESC
-    ";
+// Get company id
+$stmt = $db->prepare("SELECT Com_Id FROM company WHERE User_Id = ?");
+$stmt->execute([$_SESSION['user_id']]);
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+if (!$row) {
+    echo json_encode(["success" => false, "message" => "Company not found"]);
+    exit;
+}
+$companyId = $row['Com_Id'];
+
+// Filter by internshipId if provided
+$internshipId = isset($_GET['internshipId']) ? intval($_GET['internshipId']) : 0;
+
+if ($internshipId > 0) {
+    $sql = "SELECT a.*, s.fname, s.lname, s.profile_img, s.cv_file, s.phone, s.github, s.linkedin, s.education, s.experience, u.email, i.title AS internship_title
+            FROM application a
+            JOIN student s ON a.Student_Id = s.Student_Id
+            JOIN users u ON s.User_Id = u.User_Id
+            JOIN internship i ON a.Internship_Id = i.Internship_Id
+            WHERE a.Internship_Id = ? AND a.Internship_Id IN (SELECT Internship_Id FROM internship WHERE Company_Id = ?)
+            ORDER BY a.applied_date DESC";
+    $stmt = $db->prepare($sql);
+    $stmt->execute([$internshipId, $companyId]);
+} else {
+    $sql = "SELECT a.*, s.fname, s.lname, s.profile_img, s.cv_file, s.phone, s.github, s.linkedin, s.education, s.experience, u.email, i.title AS internship_title
+            FROM application a
+            JOIN student s ON a.Student_Id = s.Student_Id
+            JOIN users u ON s.User_Id = u.User_Id
+            JOIN internship i ON a.Internship_Id = i.Internship_Id
+            WHERE a.Internship_Id IN (SELECT Internship_Id FROM internship WHERE Company_Id = ?)
+            ORDER BY a.applied_date DESC";
     $stmt = $db->prepare($sql);
     $stmt->execute([$companyId]);
-    $applications = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    echo json_encode(["success" => true, "applications" => $applications]);
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(["success" => false, "message" => "Server error"]);
 }
+
+$applications = [];
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $applications[] = [
+        "id" => (int)$row["Application_Id"],
+        "student_id" => (int)$row["Student_Id"],
+        "internship_id" => (int)$row["Internship_Id"],
+        "internship_title" => $row["internship_title"],
+        "name" => trim($row["fname"] . " " . $row["lname"]),
+        "image" => $row["profile_img"],
+        "cv" => $row["cv_file"],
+        "email" => $row["email"],
+        "phone" => $row["phone"],
+        "github" => $row["github"],
+        "linkedin" => $row["linkedin"],
+        "education" => $row["education"],
+        "experience" => $row["experience"],
+        "applied" => $row["applied_date"],
+        "status" => $row["status"],
+        "role" => "Student",
+        "skills" => "", // Add skills if needed
+    ];
+}
+
+echo json_encode(["success" => true, "applications" => $applications]);
