@@ -52,6 +52,14 @@ if ($internshipId > 0) {
 
 $applications = [];
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    // Fetch skills for this student
+    $skills = [];
+    $skillStmt = $db->prepare("SELECT skill_name FROM skill WHERE Student_Id = ?");
+    $skillStmt->execute([$row["Student_Id"]]);
+    while ($skillRow = $skillStmt->fetch(PDO::FETCH_ASSOC)) {
+        $skills[] = $skillRow["skill_name"];
+    }
+
     $applications[] = [
         "id" => (int)$row["Application_Id"],
         "student_id" => (int)$row["Student_Id"],
@@ -69,7 +77,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         "applied" => $row["applied_date"],
         "status" => $row["status"],
         "role" => "Student",
-        "skills" => "", // Add skills if needed
+        "skills" => implode(", ", $skills), // <-- Add this line
     ];
 }
 
