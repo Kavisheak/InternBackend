@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../../api/sessions.php';
 require_once __DIR__ . '/../models/StudentNotification.php';
 
 $db = (new Database())->getConnection();
