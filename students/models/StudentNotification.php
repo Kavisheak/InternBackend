@@ -67,7 +67,7 @@ class StudentNotification extends Notifications {
         $stmt = $this->conn->prepare("SELECT COUNT(*) as cnt FROM studentreport WHERE Student_Id = ?");
         $stmt->execute([$studentId]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($row && $row['cnt'] >= 5) {
+        if ($row && $row['cnt'] == 5) { // Only when count is exactly 5
             // Check if already notified
             $stmt2 = $this->conn->prepare(
                 "SELECT sn.SNID FROM studentnotification sn
@@ -77,7 +77,7 @@ class StudentNotification extends Notifications {
             $stmt2->execute([$studentId]);
             if ($stmt2->fetch()) return false;
 
-            $message = "You have received 5 or more reports. Please follow community guidelines and standards.";
+            $message = "You have received 5 reports. Please follow community guidelines and standards.";
             $nid = $this->createNotification($message, "report_warning");
             $stmt3 = $this->conn->prepare("INSERT INTO studentnotification (Nid, Student_Id, seen) VALUES (?, ?, 0)");
             return $stmt3->execute([$nid, $studentId]);
