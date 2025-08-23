@@ -29,17 +29,38 @@ $db = $database->getConnection();
 
 $user = new User($db);
 
+// ✅ Verify login
 $userData = $user->verifyLogin($data->email, $data->password);
 
 if ($userData) {
-    // Save user info to session
+    // Save session data
     $_SESSION['user_id'] = $userData['User_Id'];
     $_SESSION['email'] = $userData['email'];
     $_SESSION['username'] = $userData['username'];
     $_SESSION['role'] = $userData['role'];
 
-    // For debugging session (optional)
-    // file_put_contents("debug_session.log", print_r($_SESSION, true));
+    // ✅ Handle Remember Me
+    $rememberMe = isset($data->rememberMe) && $data->rememberMe;
+
+    if ($rememberMe) {
+        // Generate secure token
+        $token = bin2hex(random_bytes(16));
+
+        // Store token in DB (your users table must have `remember_token` column)
+        $stmt = $db->prepare("UPDATE users SET remember_token = ? WHERE User_Id = ?");
+        $stmt->execute([$token, $userData['User_Id']]);
+
+        // Set HttpOnly cookie for 7 days
+        setcookie(
+            "remember_token", 
+            $token, 
+            time() + (86400 * 7), // 7 days
+            "/",                  // available across the site
+            "",                   // domain (empty = current domain)
+            false,                // set TRUE if using HTTPS
+            true                  // HttpOnly: prevents JS access
+        );
+    }
 
     echo json_encode([
         "success" => true,

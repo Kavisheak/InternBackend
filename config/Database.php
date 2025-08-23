@@ -1,9 +1,9 @@
 <?php
 class Database {
-    private $host = "172.28.79.127"; // OR localhost
+    private $host = "127.0.0.1"; // OR localhost
     private $db_name = "internsparkdatabase";
-    private $username = "cstuser";
-    private $password = "cst123";
+    private $username = "root";
+    private $password = "";
     public $conn;
 
     public function getConnection() {
