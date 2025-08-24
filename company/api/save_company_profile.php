@@ -1,6 +1,6 @@
 <?php
 // Start session
-session_start();
+require_once "../../api/sessions.php";
 
 // CORS headers (must be before any output)
 require_once __DIR__ . '/../../config/cors.php';

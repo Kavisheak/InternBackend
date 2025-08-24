@@ -1,9 +1,8 @@
 <?php
 class User {
     private $conn;
-    private $table = "users"; // adjust to your table name
+    private $table = "users"; 
 
-    public $id;
     public $username;
     public $email;
     public $password;
@@ -13,86 +12,51 @@ class User {
         $this->conn = $db;
     }
 
-    // ✅ Register new user
-    public function register($username, $email, $password, $role = "user") {
-        $query = "INSERT INTO " . $this->table . " (username, email, password, role) 
-                  VALUES (:username, :email, :password, :role)";
-
+    public function emailExists($email) {
+        $query = "SELECT User_Id FROM " . $this->table . " WHERE email = :email LIMIT 1";
         $stmt = $this->conn->prepare($query);
-        $hashed = password_hash($password, PASSWORD_BCRYPT);
-
-        $stmt->bindParam(":username", $username);
-        $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":password", $hashed);
-        $stmt->bindParam(":role", $role);
-
-        return $stmt->execute();
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC) !== false;
     }
 
-    // ✅ Verify login
+    public function setPassword($password) {
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    public function create() {
+        $query = "INSERT INTO " . $this->table . "
+                  (username, email, password, role, is_active, created_at)
+                  VALUES (:username, :email, :password, :role, 1, NOW())";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':username', $this->username);
+        $stmt->bindParam(':email', $this->email);
+        $stmt->bindParam(':password', $this->password);
+        $stmt->bindParam(':role', $this->role);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            $error = $stmt->errorInfo();
+            echo json_encode(["success" => false, "message" => "DB Error: " . $error[2]]);
+            return false;
+        }
+    }
+
+    // ✅ Add this for login
     public function verifyLogin($email, $password) {
         $query = "SELECT * FROM " . $this->table . " WHERE email = :email LIMIT 1";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":email", $email);
+        $stmt->bindParam(':email', $email);
         $stmt->execute();
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user && password_verify($password, $user['password'])) {
-            return $user; // return user data
+            return $user;
         }
+
         return false;
     }
-
-    // ✅ Check if email exists
-    public function emailExists($email) {
-        $query = "SELECT * FROM " . $this->table . " WHERE email = :email LIMIT 1";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":email", $email);
-        $stmt->execute();
-
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    // ✅ Store reset token
-    public function storeResetToken($email, $token) {
-        $query = "UPDATE " . $this->table . " 
-                  SET reset_token = :token, reset_expires = DATE_ADD(NOW(), INTERVAL 1 HOUR) 
-                  WHERE email = :email";
-
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":token", $token);
-        $stmt->bindParam(":email", $email);
-
-        return $stmt->execute();
-    }
-
-    // ✅ Verify token
-    public function verifyToken($token) {
-        $query = "SELECT * FROM " . $this->table . " 
-                  WHERE reset_token = :token AND reset_expires > NOW() 
-                  LIMIT 1";
-
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":token", $token);
-        $stmt->execute();
-
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    // ✅ Update password
-    public function updatePassword($token, $newPassword) {
-        $hashed = password_hash($newPassword, PASSWORD_BCRYPT);
-
-        $query = "UPDATE " . $this->table . " 
-                  SET password = :password, reset_token = NULL, reset_expires = NULL 
-                  WHERE reset_token = :token";
-
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":password", $hashed);
-        $stmt->bindParam(":token", $token);
-
-        return $stmt->execute();
-    }
 }
-?>
