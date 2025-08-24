@@ -20,11 +20,11 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $hoursLeft = ($deadline->getTimestamp() - $now->getTimestamp()) / 3600;
 
     // Remove bookmark if deadline passed
-    if ($now > $deadline) {
-        $del = $db->prepare("DELETE FROM bookmarked WHERE bookmark_id = ?");
-        $del->execute([$row['bookmark_id']]);
-        continue;
-    }
+    // if ($now > $deadline) {
+    //     $del = $db->prepare("DELETE FROM bookmarked WHERE bookmark_id = ?");
+    //     $del->execute([$row['bookmark_id']]);
+    //     continue;
+    // }
 
     // Notify if less than 24h left and not already notified for this bookmark
     if ($hoursLeft <= 24 && $hoursLeft > 0 && $row['deadline_notified'] == 0) {

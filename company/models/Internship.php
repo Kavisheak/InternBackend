@@ -71,7 +71,10 @@ class Internship
 
     public function getAll()
     {
-        $query = "SELECT Internship.*, Company.company_name AS company 
+        $query = "SELECT 
+                    Internship.*, 
+                    Company.company_name AS company,
+                    (SELECT COUNT(*) FROM Application WHERE Internship_Id = Internship.Internship_Id) AS applicants
                   FROM Internship
                   INNER JOIN Company ON Internship.Company_Id = Company.Com_Id
                   WHERE Internship.is_active = 1 AND Internship.Company_Id = :company_id

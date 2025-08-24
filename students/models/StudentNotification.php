@@ -61,7 +61,7 @@ class StudentNotification extends Notifications {
         return $stmt->execute([$nid, $studentId]);
     }
 
-    // Notify student if they have 5 or more reports
+    // Notify student if they have 5 
     public function notifyIfReported($studentId) {
         // Count reports
         $stmt = $this->conn->prepare("SELECT COUNT(*) as cnt FROM studentreport WHERE Student_Id = ?");
