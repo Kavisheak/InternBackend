@@ -4,6 +4,8 @@
 require_once "../../api/sessions.php";
 require_once __DIR__ . "/../../config/cors.php";
 require_once __DIR__ . "/../../config/Database.php";
+// Add StudentNotification class
+require_once __DIR__ . "/../../students/models/StudentNotification.php";
 
 header("Content-Type: application/json");
 
@@ -36,7 +38,28 @@ try {
     $stmt = $db->prepare("UPDATE application SET status = ?, updated_at = NOW() WHERE Application_Id = ?");
     $success = $stmt->execute([$status, $appId]);
     if ($success) {
-        echo json_encode(["success" => true, "message" => "Status updated"]);
+        // Fetch student, internship, and company info for notification
+        $stmt2 = $db->prepare(
+            "SELECT a.Student_Id, i.title AS internship_title, c.company_name
+             FROM application a
+             JOIN internship i ON a.Internship_Id = i.Internship_Id
+             JOIN company c ON i.Company_Id = c.Com_Id
+             WHERE a.Application_Id = ?"
+        );
+        $stmt2->execute([$appId]);
+        $row = $stmt2->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            $notif = new StudentNotification($db);
+            $notif->notifyStatusUpdate(
+                $row['Student_Id'],
+                $row['company_name'],
+                $row['internship_title'],
+                $status
+            );
+        }
+
+        echo json_encode(["success" => true, "message" => "Status updated and student notified"]);
     } else {
         http_response_code(500);
         echo json_encode(["success" => false, "message" => "Update failed"]);
