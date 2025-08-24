@@ -1,9 +1,10 @@
 <?php
 
 require_once(__DIR__ . '/../../config/Database.php');
+require_once "../../api/sessions.php";
 
 
-class Dashboard {
+class Admin {
     private $conn;
 
     public function __construct() {
@@ -31,5 +32,23 @@ class Dashboard {
                 "total" => (int)$internCounts['total']
             ]
         ];
+    }
+
+    public function getCompanyReports($companyId) {
+        $stmt = $this->conn->prepare("
+            SELECT 
+                cr.Company_Report_Id as id,
+                cr.reason,
+                cr.reported_at,
+                s.Student_Id,
+                s.name as student_name,
+                s.email as student_email
+            FROM companyreport cr
+            LEFT JOIN student s ON cr.Student_Id = s.Student_Id
+            WHERE cr.Company_Id = :companyId
+            ORDER BY cr.reported_at DESC
+        ");
+        $stmt->execute([':companyId' => $companyId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
