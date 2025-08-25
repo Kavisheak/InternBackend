@@ -6,18 +6,26 @@ require_once "../../api/sessions.php";
 
 if (isset($_GET['id'])) {
     $internshipId = intval($_GET['id']);
-    $internships = new Internships();
-    $internship = $internships->getInternshipById($internshipId);
 
-    if ($internship) {
-        echo json_encode([
-            "success" => true,
-            "data" => $internship
-        ]);
-    } else {
+    try {
+        $internships = new Internships();
+        $internship = $internships->getInternshipById($internshipId);
+
+        if ($internship) {
+            echo json_encode([
+                "success" => true,
+                "data" => $internship
+            ]);
+        } else {
+            echo json_encode([
+                "success" => false,
+                "message" => "Internship not found"
+            ]);
+        }
+    } catch (Exception $e) {
         echo json_encode([
             "success" => false,
-            "message" => "Internship not found"
+            "message" => "Error: " . $e->getMessage()
         ]);
     }
 } else {

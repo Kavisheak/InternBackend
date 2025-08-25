@@ -6,11 +6,14 @@ class Internships {
     private $conn;
     private $company_id;
 
-
     public function __construct() {
         $database = new Database();
         $this->conn = $database->getConnection();
-       
+
+        // set company_id from session if available
+        if (isset($_SESSION['company_id'])) {
+            $this->company_id = $_SESSION['company_id'];
+        }
     }
 
     public function getAllInternships() {
@@ -48,21 +51,10 @@ class Internships {
 
     public function getInternshipById($id) {
         $stmt = $this->conn->prepare("
-            SELECT 
-                i.Internship_Id as id,
-                i.title,
-                c.company_name,
-                i.location,
-                i.duration,
-                i.salary,
-                i.internship_type,
-                i.description,
-                i.requirements,
-                i.deadline,
-                i.application_limit,
-                i.is_active,
-                i.created_at,
-                i.updated_at
+            SELECT i.Internship_Id as id, i.title, i.location, i.duration, i.salary,
+                   i.internship_type, i.description, i.requirements, i.deadline,
+                   i.application_limit, i.is_active, i.created_at, i.updated_at,
+                   c.company_name, c.location AS company_location, c.website, c.about
             FROM internship i
             JOIN company c ON i.Company_Id = c.Com_Id
             WHERE i.Internship_Id = :id
@@ -72,9 +64,11 @@ class Internships {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function delete($id)
-    {
-        $stmt = $this->conn->prepare("DELETE FROM internship WHERE Internship_Id = :id AND Company_Id = :company_id");
+    public function delete($id) {
+        $stmt = $this->conn->prepare("
+            DELETE FROM internship 
+            WHERE Internship_Id = :id AND Company_Id = :company_id
+        ");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':company_id', $this->company_id, PDO::PARAM_INT);
         return $stmt->execute();
