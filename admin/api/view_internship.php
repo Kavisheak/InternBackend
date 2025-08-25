@@ -2,6 +2,7 @@
 header("Content-Type: application/json");
 require_once(__DIR__ . '/../models/internships.php');
 require_once(__DIR__ . '/../../config/cors.php');
+require_once "../../api/sessions.php";
 
 if (isset($_GET['id'])) {
     $internshipId = intval($_GET['id']);
