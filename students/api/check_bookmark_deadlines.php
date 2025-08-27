@@ -19,13 +19,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $deadline = new DateTime($row['deadline']);
     $hoursLeft = ($deadline->getTimestamp() - $now->getTimestamp()) / 3600;
 
-    // If deadline was extended and notification flag is set, reset it
-    if ($row['deadline_notified'] == 1 && $hoursLeft > 24) {
-        $upd = $db->prepare("UPDATE bookmarked SET deadline_notified = 0 WHERE bookmark_id = ?");
-        $upd->execute([$row['bookmark_id']]);
-    }
-
-   // Remove bookmark if deadline passed
+    // Remove bookmark if deadline passed
     if ($now > $deadline) {
         $del = $db->prepare("DELETE FROM bookmarked WHERE bookmark_id = ?");
         $del->execute([$row['bookmark_id']]);
