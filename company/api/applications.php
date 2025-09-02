@@ -29,7 +29,7 @@ $companyId = $row['Com_Id'];
 $internshipId = isset($_GET['internshipId']) ? intval($_GET['internshipId']) : 0;
 
 if ($internshipId > 0) {
-    $sql = "SELECT a.*, s.fname, s.lname, s.profile_img, s.cv_file, s.phone, s.github, s.linkedin, s.education, s.experience, u.email, i.title AS internship_title
+    $sql = "SELECT a.*, s.fname, s.lname, s.profile_img, s.cv_file, s.phone, s.github, s.linkedin, s.education, s.experience, s.gender, u.email, i.title AS internship_title
             FROM application a
             JOIN student s ON a.Student_Id = s.Student_Id
             JOIN users u ON s.User_Id = u.User_Id
@@ -39,7 +39,7 @@ if ($internshipId > 0) {
     $stmt = $db->prepare($sql);
     $stmt->execute([$internshipId, $companyId]);
 } else {
-    $sql = "SELECT a.*, s.fname, s.lname, s.profile_img, s.cv_file, s.phone, s.github, s.linkedin, s.education, s.experience, u.email, i.title AS internship_title
+    $sql = "SELECT a.*, s.fname, s.lname, s.profile_img, s.cv_file, s.phone, s.github, s.linkedin, s.education, s.experience, s.gender, u.email, i.title AS internship_title
             FROM application a
             JOIN student s ON a.Student_Id = s.Student_Id
             JOIN users u ON s.User_Id = u.User_Id
@@ -77,7 +77,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         "applied" => $row["applied_date"],
         "status" => $row["status"],
         "role" => "Student",
-        "skills" => implode(", ", $skills), // <-- Add this line
+        "skills" => implode(", ", $skills),
+        "gender" => $row["gender"],
     ];
 }
 

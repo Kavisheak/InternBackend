@@ -98,4 +98,47 @@ class Application {
         }
         return array_values($grouped);
     }
+
+    public function getApplicationsForStudent($studentId) {
+        $sql = "
+            SELECT
+                a.Application_Id,
+                i.title,
+                c.company_name AS company,
+                i.location,
+                DATE_FORMAT(a.applied_date, '%Y-%m-%d') AS appliedDate,
+                i.deadline,
+                a.status,
+                i.internship_type AS jobType,
+                i.salary AS stipend,
+                i.duration,
+                i.description,
+                i.requirements,
+                i.Internship_Id
+            FROM application a
+            JOIN internship i ON a.Internship_Id = i.Internship_Id
+            JOIN company c ON i.Company_Id = c.Com_Id
+            WHERE a.Student_Id = ?
+            ORDER BY a.applied_date DESC
+        ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$studentId]);
+        $apps = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Optionally, fetch skills for each internship
+        foreach ($apps as &$app) {
+            $skills = [];
+            $reqs = explode("\n", $app['requirements']);
+            foreach ($reqs as $req) {
+                $skills[] = trim($req);
+            }
+            $app['skills'] = $skills;
+        }
+        return $apps;
+    }
+
+    public function deleteApplication($applicationId, $studentId) {
+        $stmt = $this->db->prepare("DELETE FROM application WHERE Application_Id = ? AND Student_Id = ?");
+        return $stmt->execute([$applicationId, $studentId]);
+    }
 }

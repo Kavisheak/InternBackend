@@ -31,15 +31,17 @@ if (empty($internshipIds)) {
     exit;
 }
 
-// Get internship details
+// Get internship details, ordered by bookmark time (newest first)
 $placeholders = implode(',', array_fill(0, count($internshipIds), '?'));
 $stmt = $db->prepare("
-    SELECT i.*, c.company_name
+    SELECT i.*, c.company_name, b.bookmarked_at
     FROM internship i
     JOIN company c ON i.Company_Id = c.Com_Id
+    JOIN bookmarked b ON b.internship_id = i.Internship_Id AND b.student_id = ?
     WHERE i.Internship_Id IN ($placeholders)
+    ORDER BY b.bookmarked_at DESC
 ");
-$stmt->execute($internshipIds);
+$stmt->execute(array_merge([$studentId], $internshipIds));
 $internships = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 echo json_encode(['success' => true, 'internships' => $internships]);
