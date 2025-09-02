@@ -71,7 +71,8 @@ class Internships {
         ");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':company_id', $this->company_id, PDO::PARAM_INT);
-        return $stmt->execute();
+    $stmt->execute();
+    return ($stmt->rowCount() > 0);
     }
 }
 ?>

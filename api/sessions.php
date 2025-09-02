@@ -1,12 +1,14 @@
 <?php
 ini_set('session.gc_maxlifetime', 1800); // 30 min inactivity
+// Allow cross-site cookies during local dev so frontend (different port) can send credentials
 session_set_cookie_params([
     'lifetime' => 0, // expires when browser closes
     'path' => '/',
     'domain' => '',
     'secure' => false,
     'httponly' => true,
-    'samesite' => 'Lax'
+    // Allow cross-site cookies during local dev so frontend (different port) can send credentials
+    'samesite' => 'None'
 ]);
 session_start();
 if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 1800)) {
