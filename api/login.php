@@ -3,8 +3,13 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+<<<<<<< HEAD
 // use shared session bootstrap so cookie params (SameSite) are consistent
 require_once 'sessions.php';
+=======
+session_start();
+
+>>>>>>> 0c8c34f472b4681f5c8e8ad3692b7c42492c26a0
 require_once '../config/cors.php'; // must include before any output
 require_once '../config/Database.php';
 require_once '../models/User.php';

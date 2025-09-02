@@ -61,7 +61,7 @@ class StudentNotification extends Notifications {
         return $stmt->execute([$nid, $studentId]);
     }
 
-    // Notify student if they have 5 or more reports
+    // Notify student if they have 5 
     public function notifyIfReported($studentId) {
         // Count reports
         $stmt = $this->conn->prepare("SELECT COUNT(*) as cnt FROM studentreport WHERE Student_Id = ?");
@@ -90,5 +90,22 @@ class StudentNotification extends Notifications {
         // Delete from studentnotification (will not delete from notification table for data integrity)
         $stmt = $this->conn->prepare("DELETE FROM studentnotification WHERE Student_Id = ?");
         return $stmt->execute([$studentId]);
+    }
+
+    // Notify student about expired bookmark
+    public function notifyBookmarkExpired($studentId, $internshipTitle) {
+        // Check if already notified for this internship expiration
+        $stmt = $this->conn->prepare(
+            "SELECT sn.SNID FROM studentnotification sn
+             JOIN notification n ON sn.Nid = n.Nid
+             WHERE sn.Student_Id = ? AND n.type = 'bookmark_expired' AND n.message LIKE ?"
+        );
+        $stmt->execute([$studentId, "%$internshipTitle%"]);
+        if ($stmt->fetch()) return false;
+
+        $message = "Your bookmarked internship '$internshipTitle' has expired and was removed from your bookmarks.";
+        $nid = $this->createNotification($message, "bookmark_expired");
+        $stmt2 = $this->conn->prepare("INSERT INTO studentnotification (Nid, Student_Id, seen) VALUES (?, ?, 0)");
+        return $stmt2->execute([$nid, $studentId]);
     }
 }

@@ -8,5 +8,10 @@ $users = $admin->getNonAdminUsers();
 
 echo json_encode([
     "success" => true,
+<<<<<<< HEAD
     "data" => $users
 ]);
+=======
+    "data" => $list
+]);
+>>>>>>> 0c8c34f472b4681f5c8e8ad3692b7c42492c26a0

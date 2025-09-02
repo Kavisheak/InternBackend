@@ -1,4 +1,3 @@
-
 <?php
 require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../api/sessions.php';
@@ -34,7 +33,12 @@ if (empty($internshipIds)) {
 
 // Get internship details
 $placeholders = implode(',', array_fill(0, count($internshipIds), '?'));
-$stmt = $db->prepare("SELECT * FROM internship WHERE Internship_Id IN ($placeholders)");
+$stmt = $db->prepare("
+    SELECT i.*, c.company_name
+    FROM internship i
+    JOIN company c ON i.Company_Id = c.Com_Id
+    WHERE i.Internship_Id IN ($placeholders)
+");
 $stmt->execute($internshipIds);
 $internships = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
