@@ -4,8 +4,8 @@
 require_once "../../api/sessions.php";
 require_once __DIR__ . "/../../config/cors.php";
 require_once __DIR__ . "/../../config/Database.php";
-// Add StudentNotification class
 require_once __DIR__ . "/../../students/models/StudentNotification.php";
+require_once __DIR__ . "/../models/Application.php";
 
 header("Content-Type: application/json");
 
@@ -35,20 +35,11 @@ if ($appId <= 0 || $status === "") {
 
 try {
     $db = (new Database())->getConnection();
-    $stmt = $db->prepare("UPDATE application SET status = ?, updated_at = NOW() WHERE Application_Id = ?");
-    $success = $stmt->execute([$status, $appId]);
-    if ($success) {
-        // Fetch student, internship, and company info for notification
-        $stmt2 = $db->prepare(
-            "SELECT a.Student_Id, i.title AS internship_title, c.company_name
-             FROM application a
-             JOIN internship i ON a.Internship_Id = i.Internship_Id
-             JOIN company c ON i.Company_Id = c.Com_Id
-             WHERE a.Application_Id = ?"
-        );
-        $stmt2->execute([$appId]);
-        $row = $stmt2->fetch(PDO::FETCH_ASSOC);
+    $appModel = new Application($db);
 
+    $success = $appModel->updateStatus($appId, $status);
+    if ($success) {
+        $row = $appModel->getNotificationInfo($appId);
         if ($row) {
             $notif = new StudentNotification($db);
             $notif->notifyStatusUpdate(
@@ -58,7 +49,6 @@ try {
                 $status
             );
         }
-
         echo json_encode(["success" => true, "message" => "Status updated and student notified"]);
     } else {
         http_response_code(500);

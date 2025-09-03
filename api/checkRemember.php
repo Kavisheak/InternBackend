@@ -43,8 +43,4 @@ if (isset($_COOKIE['remember_token'])) {
 }
 
 // ❌ Case 3: Not logged in at all
-<<<<<<< HEAD
-echo json_encode(["loggedIn" => false]);
-=======
-echo json_encode(["loggedIn" => false]);
->>>>>>> 0c8c34f472b4681f5c8e8ad3692b7c42492c26a0
+
