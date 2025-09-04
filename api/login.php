@@ -80,4 +80,8 @@ if ($userData) {
         "success" => false,
         "message" => "Invalid email or password."
     ]);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> bfe3719d4308f2e2a85cb6e91f58c42723e4aaa9

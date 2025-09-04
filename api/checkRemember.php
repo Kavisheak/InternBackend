@@ -43,4 +43,9 @@ if (isset($_COOKIE['remember_token'])) {
     }
 }
 
+<<<<<<< HEAD
 // ❌ Case 3: Not logged in at all
+=======
+// ❌ Case 3: Not logged in at all
+
+>>>>>>> bfe3719d4308f2e2a85cb6e91f58c42723e4aaa9
