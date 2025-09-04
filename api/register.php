@@ -1,6 +1,7 @@
 <?php
 require_once '../config/cors.php';
 require_once '../config/Database.php';
+require_once '../config/maintenance_check.php';
 require_once '../models/User.php';
 
 $data = json_decode(file_get_contents("php://input"));
@@ -26,6 +27,27 @@ if (strlen($password) < 8 ||
 
 $db = (new Database())->getConnection();
 $user = new User($db);
+
+// Prevent new registrations while maintenance mode is active
+if (is_maintenance_mode()) {
+    echo json_encode(["success" => false, "message" => "Registrations are temporarily disabled while the site is under maintenance."]);
+    exit;
+}
+
+// Prevent student registrations if student registration is disabled in system settings
+$roleLower = strtolower($data->role);
+$userRegistration = get_setting_value('user_registration');
+if ($roleLower === 'student' && $userRegistration !== null && ($userRegistration === '0' || strtolower($userRegistration) === 'false')) {
+    echo json_encode(["success" => false, "message" => "Student registrations are currently disabled."]);
+    exit;
+}
+
+// Prevent company registrations if company registration is disabled in system settings
+$companyRegistration = get_setting_value('company_registration');
+if ($roleLower === 'company' && $companyRegistration !== null && ($companyRegistration === '0' || strtolower($companyRegistration) === 'false')) {
+    echo json_encode(["success" => false, "message" => "Company registrations are currently disabled."]);
+    exit;
+}
 
 if ($user->emailExists($data->email)) {
     echo json_encode(["success" => false, "message" => "Email already registered."]);

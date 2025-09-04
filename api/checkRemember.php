@@ -2,6 +2,7 @@
 session_start();
 
 require_once '../config/Database.php';
+require_once '../config/cors.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -43,8 +44,3 @@ if (isset($_COOKIE['remember_token'])) {
 }
 
 // ❌ Case 3: Not logged in at all
-<<<<<<< HEAD
-echo json_encode(["loggedIn" => false]);
-=======
-echo json_encode(["loggedIn" => false]);
->>>>>>> 0c8c34f472b4681f5c8e8ad3692b7c42492c26a0
