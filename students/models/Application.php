@@ -105,6 +105,7 @@ class Application {
                 a.Application_Id,
                 i.title,
                 c.company_name AS company,
+                c.logo_img, -- <-- Add this line
                 i.location,
                 DATE_FORMAT(a.applied_date, '%Y-%m-%d') AS appliedDate,
                 i.deadline,
