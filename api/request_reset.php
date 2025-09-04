@@ -1,7 +1,7 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+require_once "../../api/sessions.php";
+require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../../config/cors.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit; }
 
@@ -38,7 +38,7 @@ $expiry = date("Y-m-d H:i:s", strtotime("+1 hour"));
 $stmt = $conn->prepare("UPDATE users SET reset_token = ?, reset_expires = ? WHERE email = ?");
 $stmt->execute([$token, $expiry, $email]);
 
-$resetLink = "http://localhost:5175/reset-password?token=$token";
+$resetLink = "http://localhost:5173/reset-password?token=$token";
 
 // Send email
 $mail = new PHPMailer(true);
