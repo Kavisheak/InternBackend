@@ -1,8 +1,8 @@
 <?php
-session_start();
-
-require_once '../config/Database.php';
+// Ensure CORS headers are set before any output and use shared sessions bootstrap
 require_once '../config/cors.php';
+require_once 'sessions.php';
+require_once '../config/Database.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -18,6 +18,9 @@ if (isset($_SESSION['user_id'])) {
     exit;
 }
 
+// If we reach here, the user is not logged in
+echo json_encode(["loggedIn" => false]);
+exit;
 // ✅ Case 2: No session, check remember_token cookie
 if (isset($_COOKIE['remember_token'])) {
     $token = $_COOKIE['remember_token'];
@@ -43,9 +46,4 @@ if (isset($_COOKIE['remember_token'])) {
     }
 }
 
-<<<<<<< HEAD
-// ❌ Case 3: Not logged in at all
-=======
-// ❌ Case 3: Not logged in at all
 
->>>>>>> bfe3719d4308f2e2a85cb6e91f58c42723e4aaa9

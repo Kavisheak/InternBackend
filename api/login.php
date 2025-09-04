@@ -3,10 +3,10 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Ensure CORS headers are set before any session/cookie output
+require_once '../config/cors.php'; // must include before any output
 // use shared session bootstrap so cookie params (SameSite) are consistent
 require_once 'sessions.php';
-
-require_once '../config/cors.php'; // must include before any output
 require_once '../config/Database.php';
 require_once '../config/maintenance_check.php';
 require_once '../models/User.php';
@@ -80,8 +80,8 @@ if ($userData) {
         "success" => false,
         "message" => "Invalid email or password."
     ]);
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> bfe3719d4308f2e2a85cb6e91f58c42723e4aaa9
+
+
+

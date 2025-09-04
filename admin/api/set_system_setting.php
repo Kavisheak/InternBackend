@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../../api/sessions.php';
 require_once __DIR__ . '/../../config/cors.php';
+require_once __DIR__ . '/../../api/sessions.php';
 require_once __DIR__ . '/../../config/maintenance_check.php';
 
 header('Content-Type: application/json');
