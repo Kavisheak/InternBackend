@@ -163,7 +163,16 @@ class Admin {
                         WHEN u.role = 'company' THEN IFNULL((SELECT COUNT(*) FROM studentreport sr WHERE sr.Company_Id = c.Com_Id), 0)
                         WHEN u.role = 'student' THEN IFNULL((SELECT COUNT(*) FROM companyreport cr WHERE cr.Student_Id = s.Student_Id), 0)
                         ELSE 0
-                    END as reports_made
+                    END as reports_made,
+                    -- applications (for students) and internships (for companies)
+                    CASE
+                        WHEN u.role = 'student' THEN IFNULL((SELECT COUNT(*) FROM application a WHERE a.Student_Id = s.Student_Id), 0)
+                        ELSE 0
+                    END as applications,
+                    CASE
+                        WHEN u.role = 'company' THEN IFNULL((SELECT COUNT(*) FROM internship i WHERE i.Company_Id = c.Com_Id), 0)
+                        ELSE 0
+                    END as internships
              FROM users u
              LEFT JOIN company c ON c.User_Id = u.User_Id
              LEFT JOIN student s ON s.User_Id = u.User_Id
