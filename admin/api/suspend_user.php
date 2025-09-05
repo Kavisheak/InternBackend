@@ -65,22 +65,24 @@ $reportsCount = isset($body['reports_count']) ? (int)$body['reports_count'] : 0;
 
 $db = (new Database())->getConnection();
 try {
-    $db->beginTransaction();
-
     // Make sure the suspended_users table exists (matches your phpMyAdmin dump)
+    // Ensure suspended_users has an auto-increment primary key so inserts without an id succeed
     $createSql = "CREATE TABLE IF NOT EXISTS suspended_users (
-      Suspended_Id int(11) NOT NULL,
-      User_Id int(11) NOT NULL,
-      username varchar(255) NOT NULL,
-      email varchar(255) NOT NULL,
-      role enum('student','company','admin') NOT NULL,
-      reason text DEFAULT 'Exceeded report threshold',
-      reports_count int(11) DEFAULT 0,
-      suspended_at datetime DEFAULT current_timestamp(),
-      original_created_at datetime DEFAULT NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
+            Suspended_Id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            User_Id int(11) NOT NULL,
+            username varchar(255) NOT NULL,
+            email varchar(255) NOT NULL,
+            role enum('student','company','admin') NOT NULL,
+            reason text DEFAULT 'Exceeded report threshold',
+            reports_count int(11) DEFAULT 0,
+            suspended_at datetime DEFAULT current_timestamp(),
+            original_created_at datetime DEFAULT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
 
+    // Execute DDL outside transaction to avoid implicit commit side-effects
     $db->exec($createSql);
+
+    $db->beginTransaction();
 
     // Fetch the user row for insertion
     $stmt = $db->prepare('SELECT User_Id, username, email, role, created_at FROM users WHERE User_Id = :id FOR UPDATE');
@@ -142,10 +144,26 @@ try {
 
     $db->commit();
 
-    echo json_encode(['success' => true, 'message' => 'User suspended']);
+    // fetch updated active status to return authoritative state
+    $ust = $db->prepare('SELECT is_active FROM users WHERE User_Id = :id LIMIT 1');
+    $ust->execute([':id' => $userId]);
+    $updated = $ust->fetch(PDO::FETCH_ASSOC);
+
+    // Return a minimal success message including the username
+    $msg = (isset($user['username']) ? $user['username'] : 'User') . ' suspended';
+    echo json_encode([
+        'success' => true,
+        'message' => $msg
+    ]);
 } catch (Exception $e) {
     if ($db->inTransaction()) $db->rollBack();
     error_log('suspend_user error: ' . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Server error']);
+    // In development, include error message to aid debugging. Remove or hide in production.
+    $dev = true;
+    if (!empty($dev)) {
+        echo json_encode(['success' => false, 'message' => 'Server error', 'error' => $e->getMessage()]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Server error']);
+    }
 }
