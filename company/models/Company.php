@@ -18,10 +18,8 @@ class Company {
 
     // Get company profile by user id
     public function getProfileByUserId($userId) {
-        $query = "SELECT * FROM {$this->table} WHERE User_Id = :userId LIMIT 1";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':userId', $userId);
-        $stmt->execute();
+        $stmt = $this->conn->prepare("SELECT company_name, industry, company_size, location, website, about, logo_img FROM company WHERE User_Id = ?");
+        $stmt->execute([$userId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

@@ -1,9 +1,7 @@
-
 <?php
 require_once "../../api/sessions.php";
 require_once "../../config/Database.php";
 require_once __DIR__ . "/../../config/cors.php";
-
 header("Content-Type: application/json");
 
 // Only allow logged-in students

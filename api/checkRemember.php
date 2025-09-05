@@ -1,5 +1,9 @@
 <?php
+
 // Ensure CORS headers are set before any output and use shared sessions bootstrap
+session_start();
+require_once '../config/cors.php';
+require_once '../config/Database.php';
 require_once '../config/cors.php';
 require_once 'sessions.php';
 require_once '../config/Database.php';
@@ -45,5 +49,3 @@ if (isset($_COOKIE['remember_token'])) {
         exit;
     }
 }
-
-
