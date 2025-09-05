@@ -8,7 +8,6 @@ require_once 'sessions.php';
 
 require_once '../config/cors.php'; // must include before any output
 require_once '../config/Database.php';
-require_once '../config/maintenance_check.php';
 require_once '../models/User.php';
 
 // Handle preflight
@@ -35,14 +34,6 @@ $db = $database->getConnection();
 $user = new User($db);
 
 $userData = $user->verifyLogin($data->email, $data->password);
-
-// If maintenance mode is active, allow only admins to log in
-if (is_maintenance_mode()) {
-    if (!$userData || !isset($userData['role']) || $userData['role'] !== 'admin') {
-        echo json_encode(["success" => false, "message" => "The site is under maintenance. Only administrators can sign in now."]);
-        exit;
-    }
-}
 
 if ($userData) {
     // Save user info to session
@@ -80,8 +71,4 @@ if ($userData) {
         "success" => false,
         "message" => "Invalid email or password."
     ]);
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> bfe3719d4308f2e2a85cb6e91f58c42723e4aaa9

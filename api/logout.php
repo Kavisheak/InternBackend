@@ -1,4 +1,3 @@
-
 <?php
 require_once "../api/sessions.php";
 require_once '../config/cors.php'; // must include before any output
