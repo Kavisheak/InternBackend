@@ -49,5 +49,3 @@ if (isset($_COOKIE['remember_token'])) {
         exit;
     }
 }
-
-

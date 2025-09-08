@@ -1,7 +1,7 @@
 <?php
 // Ensure CORS headers are present for any endpoint that includes sessions.php
-if (file_exists(__DIR__ . '/../config/cors.php')) {
-    require_once __DIR__ . '/../config/cors.php';
+if (file_exists(__DIR__.'/../config/cors.php')) {
+    require_once __DIR__.'/../config/cors.php';
 }
 
 ini_set('session.gc_maxlifetime', 1800); // 30 min inactivity
