@@ -1,4 +1,3 @@
-
 <?php
 // Ensure CORS headers before session operations
 require_once '../config/cors.php'; // must include before any output

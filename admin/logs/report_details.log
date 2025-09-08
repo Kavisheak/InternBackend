@@ -140,3 +140,9 @@ SESSION={"LAST_ACTIVITY":1757071695,"user_id":63,"email":"admin1@gmail.com","use
 2025-09-05T13:28:15+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"68"} SESSION_RAW={"LAST_ACTIVITY":1757071695,"user_id":63,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
 2025-09-05T13:28:15+02:00 - Session identity used role=admin company=
 2025-09-05T13:28:15+02:00 - ADMIN delete id=68 success
+2025-09-05T13:48:58+02:00 - REQUEST from ::1
+POST={"id":"63"}
+SESSION={"LAST_ACTIVITY":1757072938,"user_id":63,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
+2025-09-05T13:48:58+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"63"} SESSION_RAW={"LAST_ACTIVITY":1757072938,"user_id":63,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
+2025-09-05T13:48:58+02:00 - Session identity used role=admin company=
+2025-09-05T13:48:58+02:00 - ADMIN delete id=63 success
