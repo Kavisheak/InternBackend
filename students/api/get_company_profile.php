@@ -1,4 +1,3 @@
-
 <?php
 require_once __DIR__ . '/../../config/Database.php';
 require_once __DIR__ . '/../../config/cors.php';
@@ -10,7 +9,8 @@ if ($companyId <= 0) {
 }
 try {
     $db = (new Database())->getConnection();
-    $stmt = $db->prepare("SELECT company_name, industry, company_size, location, website, about FROM company WHERE Com_Id = ?");
+    // Add logo_img to SELECT
+    $stmt = $db->prepare("SELECT company_name, industry, company_size, location, website, about, logo_img FROM company WHERE Com_Id = ?");
     $stmt->execute([$companyId]);
     $profile = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($profile) {

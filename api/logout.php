@@ -1,9 +1,11 @@
 <?php
-require_once "../api/sessions.php";
+// Ensure CORS headers before session operations
 require_once '../config/cors.php'; // must include before any output
+require_once "../api/sessions.php";
 require_once '../config/Database.php';
 require_once '../models/User.php';
 
+<<<<<<< HEAD
 session_start();
 require_once '../config/Database.php';
 
@@ -23,3 +25,8 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
         $_SESSION['role'] = $user['role'];
     }
 }
+=======
+session_unset();
+session_destroy();
+echo json_encode(["success" => true, "message" => "Session closed"]);
+>>>>>>> de7540454a6b5dda92dbb8bf2643b13b5e70948d

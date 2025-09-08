@@ -134,129 +134,15 @@ SESSION={"LAST_ACTIVITY":1756360399}
 2025-08-28T07:53:19+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=admin post_company= post_user_id=15 POST_RAW={"id":"31","dev":"1","user_id":"15","role":"admin"} SESSION_RAW={"LAST_ACTIVITY":1756360399}
 2025-08-28T07:53:19+02:00 - Dev fallback used role=admin company= post_user_id=15
 2025-08-28T07:53:19+02:00 - ADMIN delete id=31 success
-2025-09-03T13:32:51+02:00 - REQUEST from ::1
-POST={"id":"39","dev":"1","user_id":"33","role":"student"}
-SESSION={"LAST_ACTIVITY":1756899171}
-2025-09-03T13:32:51+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=student post_company= post_user_id=33 POST_RAW={"id":"39","dev":"1","user_id":"33","role":"student"} SESSION_RAW={"LAST_ACTIVITY":1756899171}
-2025-09-03T13:32:51+02:00 - Dev fallback used role=student company= post_user_id=33
-2025-09-03T13:32:51+02:00 - delete id=39 insufficient_permissions role=student
-2025-09-03T13:33:46+02:00 - REQUEST from ::1
-POST={"id":"39","dev":"1","user_id":"33","role":"student"}
-SESSION={"LAST_ACTIVITY":1756899226}
-2025-09-03T13:33:46+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=student post_company= post_user_id=33 POST_RAW={"id":"39","dev":"1","user_id":"33","role":"student"} SESSION_RAW={"LAST_ACTIVITY":1756899226}
-2025-09-03T13:33:46+02:00 - Dev fallback used role=student company= post_user_id=33
-2025-09-03T13:33:46+02:00 - delete id=39 insufficient_permissions role=student
-2025-09-03T13:49:23+02:00 - REQUEST from ::1
-POST={"id":"39","dev":"1","user_id":"33","role":"student"}
-SESSION={"LAST_ACTIVITY":1756900163}
-2025-09-03T13:49:23+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=student post_company= post_user_id=33 POST_RAW={"id":"39","dev":"1","user_id":"33","role":"student"} SESSION_RAW={"LAST_ACTIVITY":1756900163}
-2025-09-03T13:49:23+02:00 - Dev fallback used role=student company= post_user_id=33
-2025-09-03T13:49:23+02:00 - delete id=39 insufficient_permissions role=student
-2025-09-03T14:08:59+02:00 - REQUEST from ::1
-POST={"id":"41","dev":"1","user_id":"33","role":"student"}
-SESSION={"LAST_ACTIVITY":1756901339}
-2025-09-03T14:08:59+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=student post_company= post_user_id=33 POST_RAW={"id":"41","dev":"1","user_id":"33","role":"student"} SESSION_RAW={"LAST_ACTIVITY":1756901339}
-2025-09-03T14:08:59+02:00 - Dev fallback used role=student company= post_user_id=33
-2025-09-03T14:08:59+02:00 - delete id=41 insufficient_permissions role=student
-2025-09-03T14:09:11+02:00 - REQUEST from ::1
-POST={"id":"39","dev":"1","user_id":"33","role":"student"}
-SESSION={"LAST_ACTIVITY":1756901351}
-2025-09-03T14:09:11+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=student post_company= post_user_id=33 POST_RAW={"id":"39","dev":"1","user_id":"33","role":"student"} SESSION_RAW={"LAST_ACTIVITY":1756901351}
-2025-09-03T14:09:11+02:00 - Dev fallback used role=student company= post_user_id=33
-2025-09-03T14:09:11+02:00 - delete id=39 insufficient_permissions role=student
-2025-09-03T14:11:13+02:00 - REQUEST from ::1
-POST={"id":"39","dev":"1","user_id":"33","role":"student"}
-SESSION={"LAST_ACTIVITY":1756901473}
-2025-09-03T14:11:13+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=student post_company= post_user_id=33 POST_RAW={"id":"39","dev":"1","user_id":"33","role":"student"} SESSION_RAW={"LAST_ACTIVITY":1756901473}
-2025-09-03T14:11:13+02:00 - Dev fallback used role=student company= post_user_id=33
-2025-09-03T14:11:13+02:00 - delete id=39 insufficient_permissions role=student
-2025-09-03T14:11:44+02:00 - REQUEST from ::1
-POST={"id":"39","dev":"1","user_id":"33","role":"student"}
-SESSION={"LAST_ACTIVITY":1756901504}
-2025-09-03T14:11:44+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=student post_company= post_user_id=33 POST_RAW={"id":"39","dev":"1","user_id":"33","role":"student"} SESSION_RAW={"LAST_ACTIVITY":1756901504}
-2025-09-03T14:11:44+02:00 - Dev fallback used role=student company= post_user_id=33
-2025-09-03T14:11:44+02:00 - delete id=39 insufficient_permissions role=student
-2025-09-03T14:12:05+02:00 - REQUEST from ::1
-POST={"id":"39","dev":"1","user_id":"33","role":"student"}
-SESSION={"LAST_ACTIVITY":1756901525}
-2025-09-03T14:12:05+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=student post_company= post_user_id=33 POST_RAW={"id":"39","dev":"1","user_id":"33","role":"student"} SESSION_RAW={"LAST_ACTIVITY":1756901525}
-2025-09-03T14:12:05+02:00 - Dev fallback used role=student company= post_user_id=33
-2025-09-03T14:12:05+02:00 - delete id=39 insufficient_permissions role=student
-2025-09-03T14:12:45+02:00 - REQUEST from ::1
-POST={"id":"39","dev":"1","user_id":"33","role":"student"}
-SESSION={"LAST_ACTIVITY":1756901565}
-2025-09-03T14:12:45+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=student post_company= post_user_id=33 POST_RAW={"id":"39","dev":"1","user_id":"33","role":"student"} SESSION_RAW={"LAST_ACTIVITY":1756901565}
-2025-09-03T14:12:45+02:00 - Dev fallback used role=student company= post_user_id=33
-2025-09-03T14:12:45+02:00 - delete id=39 insufficient_permissions role=student
-2025-09-03T14:14:02+02:00 - REQUEST from ::1
-POST={"id":"39","dev":"1","user_id":"33","role":"student"}
-SESSION={"LAST_ACTIVITY":1756901642}
-2025-09-03T14:14:02+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=student post_company= post_user_id=33 POST_RAW={"id":"39","dev":"1","user_id":"33","role":"student"} SESSION_RAW={"LAST_ACTIVITY":1756901642}
-2025-09-03T14:14:02+02:00 - Dev fallback used role=student company= post_user_id=33
-2025-09-03T14:14:02+02:00 - delete id=39 insufficient_permissions role=student
-2025-09-03T14:14:13+02:00 - REQUEST from ::1
-POST={"id":"40","dev":"1","user_id":"33","role":"student"}
-SESSION={"LAST_ACTIVITY":1756901653}
-2025-09-03T14:14:13+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=student post_company= post_user_id=33 POST_RAW={"id":"40","dev":"1","user_id":"33","role":"student"} SESSION_RAW={"LAST_ACTIVITY":1756901653}
-2025-09-03T14:14:13+02:00 - Dev fallback used role=student company= post_user_id=33
-2025-09-03T14:14:13+02:00 - delete id=40 insufficient_permissions role=student
-2025-09-03T14:17:18+02:00 - REQUEST from ::1
-POST={"id":"39","dev":"1","user_id":"1","role":"admin"}
-SESSION={"LAST_ACTIVITY":1756901838}
-2025-09-03T14:17:18+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=admin post_company= post_user_id=1 POST_RAW={"id":"39","dev":"1","user_id":"1","role":"admin"} SESSION_RAW={"LAST_ACTIVITY":1756901838}
-2025-09-03T14:17:18+02:00 - Dev fallback used role=admin company= post_user_id=1
-2025-09-03T14:17:18+02:00 - ADMIN delete id=39 success
-2025-09-03T14:17:51+02:00 - REQUEST from ::1
-POST={"id":"34","dev":"1","user_id":"1","role":"admin"}
-SESSION={"LAST_ACTIVITY":1756901871}
-2025-09-03T14:17:51+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=admin post_company= post_user_id=1 POST_RAW={"id":"34","dev":"1","user_id":"1","role":"admin"} SESSION_RAW={"LAST_ACTIVITY":1756901871}
-2025-09-03T14:17:51+02:00 - Dev fallback used role=admin company= post_user_id=1
-2025-09-03T14:17:51+02:00 - ADMIN delete id=34 success
-2025-09-03T14:18:15+02:00 - REQUEST from ::1
-POST={"id":"41","dev":"1","user_id":"1","role":"admin"}
-SESSION={"LAST_ACTIVITY":1756901895}
-2025-09-03T14:18:15+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=admin post_company= post_user_id=1 POST_RAW={"id":"41","dev":"1","user_id":"1","role":"admin"} SESSION_RAW={"LAST_ACTIVITY":1756901895}
-2025-09-03T14:18:15+02:00 - Dev fallback used role=admin company= post_user_id=1
-2025-09-03T14:18:15+02:00 - ADMIN delete id=41 success
-2025-09-03T14:18:31+02:00 - REQUEST from ::1
-POST={"id":"40","dev":"1","user_id":"1","role":"admin"}
-SESSION={"LAST_ACTIVITY":1756901911}
-2025-09-03T14:18:32+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=admin post_company= post_user_id=1 POST_RAW={"id":"40","dev":"1","user_id":"1","role":"admin"} SESSION_RAW={"LAST_ACTIVITY":1756901911}
-2025-09-03T14:18:32+02:00 - Dev fallback used role=admin company= post_user_id=1
-2025-09-03T14:18:32+02:00 - ADMIN delete id=40 success
-2025-09-03T14:24:45+02:00 - REQUEST from ::1
-POST={"id":"48","dev":"1","user_id":"1","role":"admin"}
-SESSION={"LAST_ACTIVITY":1756902285}
-2025-09-03T14:24:45+02:00 - DEBUG session_has_identity=0 isDevFallback=1 post_role=admin post_company= post_user_id=1 POST_RAW={"id":"48","dev":"1","user_id":"1","role":"admin"} SESSION_RAW={"LAST_ACTIVITY":1756902285}
-2025-09-03T14:24:45+02:00 - Dev fallback used role=admin company= post_user_id=1
-2025-09-03T14:24:45+02:00 - ADMIN delete id=48 success
-2025-09-03T14:25:45+02:00 - REQUEST from ::1
-POST={"id":"32"}
-SESSION={"LAST_ACTIVITY":1756902345,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
-2025-09-03T14:25:45+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"32"} SESSION_RAW={"LAST_ACTIVITY":1756902345,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
-2025-09-03T14:25:45+02:00 - Session identity used role=admin company=
-2025-09-03T14:25:45+02:00 - ADMIN delete id=32 success
-2025-09-03T14:25:52+02:00 - REQUEST from ::1
-POST={"id":"49"}
-SESSION={"LAST_ACTIVITY":1756902352,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
-2025-09-03T14:25:52+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"49"} SESSION_RAW={"LAST_ACTIVITY":1756902352,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
-2025-09-03T14:25:52+02:00 - Session identity used role=admin company=
-2025-09-03T14:25:52+02:00 - ADMIN delete id=49 success
-2025-09-03T14:26:06+02:00 - REQUEST from ::1
-POST={"id":"50"}
-SESSION={"LAST_ACTIVITY":1756902366,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
-2025-09-03T14:26:06+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"50"} SESSION_RAW={"LAST_ACTIVITY":1756902366,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
-2025-09-03T14:26:06+02:00 - Session identity used role=admin company=
-2025-09-03T14:26:06+02:00 - ADMIN delete id=50 success
-2025-09-03T14:26:52+02:00 - REQUEST from ::1
-POST={"id":"42"}
-SESSION={"LAST_ACTIVITY":1756902412,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
-2025-09-03T14:26:52+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"42"} SESSION_RAW={"LAST_ACTIVITY":1756902412,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
-2025-09-03T14:26:52+02:00 - Session identity used role=admin company=
-2025-09-03T14:26:52+02:00 - ADMIN delete id=42 success
-2025-09-04T06:30:55+02:00 - REQUEST from ::1
-POST={"id":"43"}
-SESSION={"LAST_ACTIVITY":1756960255,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
-2025-09-04T06:30:55+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"43"} SESSION_RAW={"LAST_ACTIVITY":1756960255,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
-2025-09-04T06:30:55+02:00 - Session identity used role=admin company=
-2025-09-04T06:30:55+02:00 - ADMIN delete id=43 success
+2025-09-05T13:28:15+02:00 - REQUEST from ::1
+POST={"id":"68"}
+SESSION={"LAST_ACTIVITY":1757071695,"user_id":63,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
+2025-09-05T13:28:15+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"68"} SESSION_RAW={"LAST_ACTIVITY":1757071695,"user_id":63,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
+2025-09-05T13:28:15+02:00 - Session identity used role=admin company=
+2025-09-05T13:28:15+02:00 - ADMIN delete id=68 success
+2025-09-05T13:48:58+02:00 - REQUEST from ::1
+POST={"id":"63"}
+SESSION={"LAST_ACTIVITY":1757072938,"user_id":63,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
+2025-09-05T13:48:58+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"63"} SESSION_RAW={"LAST_ACTIVITY":1757072938,"user_id":63,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
+2025-09-05T13:48:58+02:00 - Session identity used role=admin company=
+2025-09-05T13:48:58+02:00 - ADMIN delete id=63 success

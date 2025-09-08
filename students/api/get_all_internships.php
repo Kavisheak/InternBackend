@@ -24,6 +24,7 @@ try {
             i.application_limit,
             i.Company_Id,
             c.company_name AS company,
+            c.logo_img,
             i.created_at,
             i.updated_at
         FROM internship i

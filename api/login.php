@@ -3,10 +3,10 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Ensure CORS headers are set before any session/cookie output
+require_once '../config/cors.php'; // must include before any output
 // use shared session bootstrap so cookie params (SameSite) are consistent
 require_once 'sessions.php';
-
-require_once '../config/cors.php'; // must include before any output
 require_once '../config/Database.php';
 require_once '../config/maintenance_check.php';
 require_once '../models/User.php';
@@ -35,6 +35,28 @@ $db = $database->getConnection();
 $user = new User($db);
 
 $userData = $user->verifyLogin($data->email, $data->password);
+
+// If user found, ensure they are not suspended. Prefer server-side authoritative check.
+if ($userData) {
+    // If the users table uses is_active flag, block when it's 0
+    if (isset($userData['is_active']) && intval($userData['is_active']) === 0) {
+        echo json_encode(["success" => false, "message" => "Account suspended. Contact administrator."]);
+        exit;
+    }
+
+    // As a defensive check, also verify the user isn't present in suspended_users (if your suspend flow copies details there)
+    try {
+        $sstmt = $db->prepare('SELECT id FROM suspended_users WHERE user_id = :uid LIMIT 1');
+        $sstmt->execute([':uid' => $userData['User_Id']]);
+        $srow = $sstmt->fetch(PDO::FETCH_ASSOC);
+        if ($srow) {
+            echo json_encode(["success" => false, "message" => "Account suspended. Contact administrator."]);
+            exit;
+        }
+    } catch (Exception $e) {
+        // ignore DB check failures; fall back to is_active above
+    }
+}
 
 // If maintenance mode is active, allow only admins to log in
 if (is_maintenance_mode()) {
@@ -82,5 +104,3 @@ if ($userData) {
     ]);
 
 }
-
-
