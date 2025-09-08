@@ -1,11 +1,15 @@
 <?php
-require_once(__DIR__ . '/../models/users.php');
+require_once "../../api/sessions.php";
+require_once(__DIR__ . '/../models/admin.php');
 require_once(__DIR__ . '/../../config/cors.php');
 
-$users = new Users();
-$list = $users->getAllUsers();
-
+$admin = new Admin();
+$users = $admin->getNonAdminUsers();
 echo json_encode([
     "success" => true,
-    "data" => $list
+    "data" => $users
 ]);
+
+exit;
+
+

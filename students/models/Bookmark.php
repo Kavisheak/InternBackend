@@ -1,4 +1,3 @@
-
 <?php
 class Bookmark {
     private $conn;
@@ -28,5 +27,16 @@ class Bookmark {
         $stmt = $this->conn->prepare("SELECT internship_id FROM {$this->table} WHERE student_id = ?");
         $stmt->execute([$studentId]);
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public function removeExpiredBookmarks($studentId) {
+        $stmt = $this->conn->prepare("
+            DELETE FROM {$this->table}
+            WHERE student_id = ?
+            AND internship_id IN (
+                SELECT Internship_Id FROM internship WHERE deadline < CURDATE()
+            )
+        ");
+        return $stmt->execute([$studentId]);
     }
 }

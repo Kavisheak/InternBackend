@@ -4,6 +4,7 @@
 require_once "../../api/sessions.php";
 require_once __DIR__ . "/../../config/cors.php";
 require_once __DIR__ . "/../../config/Database.php";
+require_once __DIR__ . '/../models/Application.php';
 
 header("Content-Type: application/json");
 
@@ -29,7 +30,8 @@ if ($appId <= 0) {
 $userId = $_SESSION['user_id'];
 try {
     $db = (new Database())->getConnection();
-    // Get Student_Id
+    $appModel = new Application($db);
+
     $stmt = $db->prepare("SELECT Student_Id FROM student WHERE User_Id = ?");
     $stmt->execute([$userId]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -39,9 +41,8 @@ try {
     }
     $studentId = $row['Student_Id'];
 
-    // Only allow delete if this student owns the application
-    $stmt = $db->prepare("DELETE FROM application WHERE Application_Id = ? AND Student_Id = ?");
-    $success = $stmt->execute([$appId, $studentId]);
+    // Use Application model for deletion
+    $success = $appModel->deleteApplication($appId, $studentId);
     if ($success) {
         echo json_encode(["success" => true, "message" => "Application cancelled"]);
     } else {

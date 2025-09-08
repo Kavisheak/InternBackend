@@ -1,4 +1,9 @@
 <?php
+require_once "../api/sessions.php";
+require_once '../config/cors.php'; // must include before any output
+require_once '../config/Database.php';
+require_once '../models/User.php';
+
 session_start();
 require_once '../config/Database.php';
 

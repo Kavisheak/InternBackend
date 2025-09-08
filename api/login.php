@@ -3,12 +3,15 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-session_start();
+// use shared session bootstrap so cookie params (SameSite) are consistent
+require_once 'sessions.php';
 
-require_once '../config/cors.php';
+require_once '../config/cors.php'; // must include before any output
 require_once '../config/Database.php';
+require_once '../config/maintenance_check.php';
 require_once '../models/User.php';
 
+// Handle preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
@@ -19,7 +22,10 @@ header("Content-Type: application/json");
 $data = json_decode(file_get_contents("php://input"));
 
 if (!isset($data->email, $data->password)) {
-    echo json_encode(["success" => false, "message" => "Missing email or password."]);
+    echo json_encode([
+        "success" => false,
+        "message" => "Missing email or password."
+    ]);
     exit;
 }
 
@@ -30,30 +36,35 @@ $user = new User($db);
 
 $userData = $user->verifyLogin($data->email, $data->password);
 
+// If maintenance mode is active, allow only admins to log in
+if (is_maintenance_mode()) {
+    if (!$userData || !isset($userData['role']) || $userData['role'] !== 'admin') {
+        echo json_encode(["success" => false, "message" => "The site is under maintenance. Only administrators can sign in now."]);
+        exit;
+    }
+}
+
 if ($userData) {
+    // Save user info to session
     $_SESSION['user_id'] = $userData['User_Id'];
     $_SESSION['email'] = $userData['email'];
     $_SESSION['username'] = $userData['username'];
     $_SESSION['role'] = $userData['role'];
 
-    // ✅ Handle Remember Me
-    if (!empty($data->rememberMe) && $data->rememberMe === true) {
-        $token = bin2hex(random_bytes(32)); // secure 64-char token
+    $company = null;
 
-        // Store token in DB
-        $stmt = $db->prepare("UPDATE users SET remember_token = ? WHERE User_Id = ?");
-        $stmt->execute([$token, $userData['User_Id']]);
-
-        // Set secure cookie for 30 days
-        setcookie(
-            "remember_token",
-            $token,
-            time() + (86400 * 30), // 30 days
-            "/",                   // cookie available site-wide
-            "",                    // domain (empty = current)
-            false,                 // secure (set to true if using HTTPS)
-            true                   // HttpOnly (not accessible from JS)
-        );
+    // if user is a company, attach company_id into session for ownership checks
+    if (isset($userData['role']) && $userData['role'] === 'company') {
+        try {
+            $cstmt = $db->prepare('SELECT Com_Id FROM company WHERE User_Id = :uid LIMIT 1');
+            $cstmt->execute([':uid' => $userData['User_Id']]);
+            $company = $cstmt->fetch(PDO::FETCH_ASSOC);
+            if ($company && isset($company['Com_Id'])) {
+                $_SESSION['company_id'] = (int)$company['Com_Id'];
+            }
+        } catch (Exception $e) {
+            // ignore errors
+        }
     }
 
     echo json_encode([
@@ -61,8 +72,15 @@ if ($userData) {
         "message" => "Login successful.",
         "username" => $userData['username'],
         "role" => $userData['role'],
-        "user_id" => $userData['User_Id']
+        "user_id" => $userData['User_Id'],
+        "company_id" => isset($company['Com_Id']) ? (int)$company['Com_Id'] : null
     ]);
 } else {
-    echo json_encode(["success" => false, "message" => "Invalid email or password."]);
+    echo json_encode([
+        "success" => false,
+        "message" => "Invalid email or password."
+    ]);
+
 }
+
+

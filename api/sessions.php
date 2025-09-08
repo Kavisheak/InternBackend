@@ -1,13 +1,19 @@
 <?php
 ini_set('session.gc_maxlifetime', 1800); // 30 min inactivity
-session_set_cookie_params([
-    'lifetime' => 0, // expires when browser closes
+
+// Determine if the connection is secure (HTTPS). On local dev (http) we should NOT set Secure=true
+$isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+
+// For HTTPS: use SameSite=None and Secure=true (required by browsers). For local HTTP: use SameSite=Lax and Secure=false.
+$cookieParams = [
+    'lifetime' => 0,
     'path' => '/',
     'domain' => '',
-    'secure' => false,
+    'secure' => $isSecure,
     'httponly' => true,
-    'samesite' => 'Lax'
-]);
+    'samesite' => $isSecure ? 'None' : 'Lax'
+];
+session_set_cookie_params($cookieParams);
 session_start();
 if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 1800)) {
     session_unset();

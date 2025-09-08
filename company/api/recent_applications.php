@@ -82,17 +82,16 @@ function time_elapsed_string($datetime, $full = false) {
         'm' => 'month',
         'w' => 'week',
         'd' => 'day',
-        'h' => 'h',
+        'h' => 'hour',
         'i' => 'min',
-        's' => 's',
+        's' => 'sec',
     ];
-    foreach ($string as $k => &$v) {
+    $result = [];
+    foreach ($string as $k => $v) {
         if ($diff->$k) {
-            $v = $diff->$k . $v;
-        } else {
-            unset($string[$k]);
+            $result[] = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
         }
     }
-    if (!$full) $string = array_slice($string, 0, 1);
-    return $string ? implode(', ', $string) . ' ago' : 'just now';
+    if (!$full) $result = array_slice($result, 0, 1);
+    return $result ? implode(', ', $result) . ' ago' : 'just now';
 }
