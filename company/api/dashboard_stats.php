@@ -55,7 +55,7 @@ try {
         SELECT COUNT(*) AS newapps
         FROM application a
         JOIN internship i ON a.Internship_Id = i.Internship_Id
-        WHERE i.Company_Id = ? AND DATE(a.applied_date) = CURDATE()
+        WHERE i.Company_Id = ? AND a.applied_date >= DATE_SUB(NOW(), INTERVAL 1 DAY)
     ");
     $stmt->execute([$companyId]);
     $newApplications = $stmt->fetchColumn();
