@@ -32,5 +32,5 @@ $notif->syncDeadlineNotifications($companyId);
 $notif->syncReportWarnings($companyId); // <-- Add this line
 
 $notifications = $notif->getAll($companyId);
-
 echo json_encode(['success' => true, 'notifications' => $notifications]);
+

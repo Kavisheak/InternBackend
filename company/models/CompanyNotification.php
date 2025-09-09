@@ -16,7 +16,22 @@ class CompanyNotification extends Notification {
     }
 
     // Get all notifications for a company
-    public function getAll($companyId) {
+ public function getAll($companyId) {
+    // Get company’s clear time
+    $stmt = $this->db->prepare("SELECT notifications_cleared_at FROM company WHERE Com_Id = ?");
+    $stmt->execute([$companyId]);
+    $clearTime = $stmt->fetchColumn();
+
+    if ($clearTime) {
+        $stmt = $this->db->prepare("
+            SELECT cn.Company_Notif_Id, n.message, n.type, n.created_at, cn.seen
+            FROM companynotification cn
+            JOIN notification n ON cn.Notification_Id = n.Nid
+            WHERE cn.Company_Id = ? AND n.created_at > ?
+            ORDER BY n.created_at DESC
+        ");
+        $stmt->execute([$companyId, $clearTime]);
+    } else {
         $stmt = $this->db->prepare("
             SELECT cn.Company_Notif_Id, n.message, n.type, n.created_at, cn.seen
             FROM companynotification cn
@@ -25,8 +40,11 @@ class CompanyNotification extends Notification {
             ORDER BY n.created_at DESC
         ");
         $stmt->execute([$companyId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
     // Mark single notification as read
     public function markAsRead($notifId, $companyId) {
