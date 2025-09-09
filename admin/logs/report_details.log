@@ -146,3 +146,21 @@ SESSION={"LAST_ACTIVITY":1757072938,"user_id":63,"email":"admin1@gmail.com","use
 2025-09-05T13:48:58+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"63"} SESSION_RAW={"LAST_ACTIVITY":1757072938,"user_id":63,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
 2025-09-05T13:48:58+02:00 - Session identity used role=admin company=
 2025-09-05T13:48:58+02:00 - ADMIN delete id=63 success
+2025-09-08T16:14:37+02:00 - REQUEST from ::1
+POST={"id":"40"}
+SESSION={"LAST_ACTIVITY":1757340877,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
+2025-09-08T16:14:37+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"40"} SESSION_RAW={"LAST_ACTIVITY":1757340877,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
+2025-09-08T16:14:37+02:00 - Session identity used role=admin company=
+2025-09-08T16:14:37+02:00 - ADMIN delete id=40 success
+2025-09-08T16:16:56+02:00 - REQUEST from ::1
+POST={"id":"41"}
+SESSION={"LAST_ACTIVITY":1757341016,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
+2025-09-08T16:16:56+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"41"} SESSION_RAW={"LAST_ACTIVITY":1757341016,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
+2025-09-08T16:16:56+02:00 - Session identity used role=admin company=
+2025-09-08T16:16:56+02:00 - ADMIN delete id=41 success
+2025-09-09T06:44:34+02:00 - REQUEST from ::1
+POST={"id":"42"}
+SESSION={"LAST_ACTIVITY":1757393074,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
+2025-09-09T06:44:34+02:00 - DEBUG session_has_identity=1 isDevFallback=0 post_role= post_company= post_user_id= POST_RAW={"id":"42"} SESSION_RAW={"LAST_ACTIVITY":1757393074,"user_id":15,"email":"admin1@gmail.com","username":"admin1","role":"admin"}
+2025-09-09T06:44:34+02:00 - Session identity used role=admin company=
+2025-09-09T06:44:34+02:00 - ADMIN delete id=42 success
