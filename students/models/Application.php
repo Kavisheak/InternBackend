@@ -25,7 +25,37 @@ class Application {
         $stmt = $this->db->prepare(
             "INSERT INTO application (Internship_Id, Student_Id, applied_date, status) VALUES (?, ?, NOW(), 'pending')"
         );
-        return $stmt->execute([$internshipId, $studentId]);
+        $success = $stmt->execute([$internshipId, $studentId]);
+
+        if ($success) {
+            // Get company id and internship title
+            $stmt2 = $this->db->prepare("SELECT Company_Id, title FROM internship WHERE Internship_Id = ?");
+            $stmt2->execute([$internshipId]);
+            $intern = $stmt2->fetch(PDO::FETCH_ASSOC);
+            if ($intern) {
+                $companyId = $intern['Company_Id'];
+                $internshipTitle = $intern['title'];
+
+                // Count applications for this internship in last 24 hours
+                $stmt3 = $this->db->prepare("
+                    SELECT COUNT(*) AS newapps
+                    FROM application
+                    WHERE Internship_Id = ? AND applied_date >= DATE_SUB(NOW(), INTERVAL 1 DAY)
+                ");
+                $stmt3->execute([$internshipId]);
+                $newApps = $stmt3->fetchColumn();
+
+                // Build notification message
+                $notifMsg = "You have {$newApps} new application" . ($newApps > 1 ? "s" : "") . " for '{$internshipTitle}' in the last 24 hours.";
+
+                $this->db->prepare("INSERT INTO notification (message, type) VALUES (?, 'application')")
+                    ->execute([$notifMsg]);
+                $notifId = $this->db->lastInsertId();
+                $this->db->prepare("INSERT INTO companynotification (Notification_Id, Company_Id) VALUES (?, ?)")
+                    ->execute([$notifId, $companyId]);
+            }
+        }
+        return $success;
     }
 
     // Get all applications for internships posted by this company, grouped by internship
