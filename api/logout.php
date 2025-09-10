@@ -27,6 +27,8 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
 
 // --- Handle logout (destroy session) ---
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+    // Remove remember_token cookie
+    setcookie('remember_token', '', time() - 3600, '/');
     session_unset();
     session_destroy();
     echo json_encode(["success" => true, "message" => "Session closed"]);
