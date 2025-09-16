@@ -39,6 +39,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // allow admin to delete any internship
     if ($effective_role === 'admin') {
+        // Get company id and internship title before deletion
+        $stmt = $db->prepare("SELECT Company_Id, title FROM internship WHERE Internship_Id = :id");
+        $stmt->execute([':id' => $id]);
+        $intern = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($intern) {
+            $companyId = $intern['Company_Id'];
+            $internshipTitle = $intern['title'];
+
+            // Notify company
+            require_once(__DIR__ . '/../../company/models/CompanyNotification.php');
+            $companyNotif = new CompanyNotification($db);
+            $message = "Your internship post '{$internshipTitle}' has been removed by an administrator due to policy or moderation reasons. If you have questions, please contact support.";
+            $companyNotif->createForCompany($companyId, $message, 'admin_action');
+        }
+
+        // Now delete the internship
         $del = $db->prepare("DELETE FROM internship WHERE Internship_Id = :id");
         $del->execute([':id' => $id]);
         if ($del->rowCount() > 0) {
