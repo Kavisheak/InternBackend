@@ -21,11 +21,19 @@ class Application {
         return $stmt->fetchColumn() ? true : false;
     }
 
-    public function apply($studentId, $internshipId) {
+    public function apply($studentId, $internshipId, $preferredCv = null) {
+        // If no preferred CV, get student's profile CV
+        if (!$preferredCv) {
+            $stmt = $this->db->prepare("SELECT cv_file FROM student WHERE Student_Id = ?");
+            $stmt->execute([$studentId]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $preferredCv = $row && $row['cv_file'] ? $row['cv_file'] : null;
+        }
+
         $stmt = $this->db->prepare(
-            "INSERT INTO application (Internship_Id, Student_Id, applied_date, status) VALUES (?, ?, NOW(), 'pending')"
+            "INSERT INTO application (Internship_Id, Student_Id, applied_date, status, cv_url) VALUES (?, ?, NOW(), 'pending', ?)"
         );
-        $success = $stmt->execute([$internshipId, $studentId]);
+        $success = $stmt->execute([$internshipId, $studentId, $preferredCv]);
 
         if ($success) {
             // Get company id and internship title
