@@ -33,6 +33,7 @@ class Internship
             'requirements' => trim($data['requirements'] ?? ''),
             'deadline' => trim($data['deadline'] ?? ''),
             'application_limit' => intval($data['applicationLimit'] ?? 0),
+            'working_hours' => trim($data['workingHours'] ?? ''),
         ];
 
         if (!empty($data['id'])) {
@@ -47,6 +48,7 @@ class Internship
                         requirements = :requirements,
                         deadline = :deadline,
                         application_limit = :application_limit,
+                        working_hours = :working_hours,
                         updated_at = NOW()
                       WHERE Internship_Id = :id AND Company_Id = :company_id";
             $stmt = $this->db->prepare($query);
@@ -54,9 +56,9 @@ class Internship
         } else {
             // Insert
             $query = "INSERT INTO Internship 
-                        (title, location, internship_type, salary, duration, description, requirements, deadline, application_limit, Company_Id)
+                        (title, location, internship_type, salary, duration, description, requirements, deadline, application_limit, working_hours, Company_Id)
                       VALUES 
-                        (:title, :location, :internship_type, :salary, :duration, :description, :requirements, :deadline, :application_limit, :company_id)";
+                        (:title, :location, :internship_type, :salary, :duration, :description, :requirements, :deadline, :application_limit, :working_hours, :company_id)";
             $stmt = $this->db->prepare($query);
         }
 
@@ -97,7 +99,8 @@ class Internship
                     description,
                     requirements,
                     deadline,
-                    application_limit
+                    application_limit,
+                    working_hours
                   FROM Internship
                   WHERE Internship_Id = :id AND Company_Id = :company_id AND is_active = 1
                   LIMIT 1";
