@@ -15,7 +15,9 @@ $keys = [
     'maintenance_mode',
     'user_registration',
     'company_registration',
-    'site_name'
+    'site_name',
+    'maintenance_start',
+    'maintenance_end'
 ];
 
 $out = [];
