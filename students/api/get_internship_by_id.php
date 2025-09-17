@@ -30,6 +30,7 @@ try {
         i.deadline,
         i.status,
         i.application_limit,
+        i.working_hours,                -- <-- add this line
         i.Company_Id,
         c.company_name AS company,
         i.created_at
@@ -65,6 +66,11 @@ try {
 
     if (!isset($internship['company']) || $internship['company'] === null) {
         $internship['company'] = 'Unknown Company';
+    }
+
+    // Add this if you want to ensure the field is always present
+    if (!isset($internship['working_hours'])) {
+        $internship['working_hours'] = "";
     }
 
     echo json_encode(['success' => true, 'internship' => $internship]);
