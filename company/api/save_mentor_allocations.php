@@ -1,4 +1,3 @@
-
 <?php
 require_once "../../api/sessions.php";
 require_once __DIR__ . '/../../config/Database.php';
@@ -16,11 +15,14 @@ $db = (new Database())->getConnection();
 $allocations = $data['allocations'];
 $companyId = intval($data['company_id']);
 
-foreach ($allocations as $studentId => $mentorId) {
-    // Insert or update allocation
-    $stmt = $db->prepare("INSERT INTO mentor_allocations (student_id, mentor_id, company_id) VALUES (?, ?, ?)
+foreach ($allocations as $key => $mentorId) {
+    // $key is "studentId-post"
+    $parts = explode('-', $key, 2);
+    $studentId = $parts[0];
+    $post = $parts[1] ?? '';
+    $stmt = $db->prepare("INSERT INTO mentor_allocations (student_id, mentor_id, company_id, post) VALUES (?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE mentor_id = VALUES(mentor_id)");
-    $stmt->execute([$studentId, $mentorId, $companyId]);
+    $stmt->execute([$studentId, $mentorId, $companyId, $post]);
 }
 
 echo json_encode(['success' => true]);

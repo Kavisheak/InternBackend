@@ -88,3 +88,13 @@ Array
     [maintenance_start] => 2025-09-18T10:25
     [maintenance_end] => 2025-09-18T10:30
 )
+Array
+(
+    [maintenance_start] => 2025-09-20T10:25
+    [maintenance_end] => 2025-09-20T17:30
+)
+Array
+(
+    [maintenance_start] => 2025-09-20T10:30
+    [maintenance_end] => 2025-09-20T17:30
+)

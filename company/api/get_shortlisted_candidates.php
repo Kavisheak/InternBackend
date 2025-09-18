@@ -49,7 +49,7 @@ try {
             JOIN internship i ON a.Internship_Id = i.Internship_Id
             LEFT JOIN interview_schedule iv ON iv.application_id = a.Application_Id
             LEFT JOIN reschedule_requests rr ON rr.interview_id = iv.id AND rr.status = 'pending'
-            WHERE a.status = 'Accepted' AND i.Company_Id = ?";
+            WHERE a.status = 'Shortlisted' AND i.Company_Id = ?";
     $params = [$companyId];
     if ($internshipTitle) {
         $sql .= " AND i.title = ?";

@@ -17,7 +17,9 @@ $keys = [
     'company_registration',
     'site_name',
     'maintenance_start',
-    'maintenance_end'
+    'maintenance_end',
+    'max_failed_attempts',
+    'lockout_duration'
 ];
 
 $out = [];
