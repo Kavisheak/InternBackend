@@ -31,6 +31,8 @@ $appRows = $appModel->getApplications($companyId, $internshipId);
 $applications = [];
 foreach ($appRows as $row) {
     $skills = $appModel->getSkillsByStudentId($row["Student_Id"]);
+    // Fallback: use cv_url if present, else cv_file
+    $cvPath = $row["cv_url"] ? $row["cv_url"] : $row["cv_file"];
     $applications[] = [
         "id" => (int)$row["Application_Id"],
         "student_id" => (int)$row["Student_Id"],
@@ -38,7 +40,7 @@ foreach ($appRows as $row) {
         "internship_title" => $row["internship_title"],
         "name" => trim($row["fname"] . " " . $row["lname"]),
         "image" => $row["profile_img"],
-        "cv" => $row["cv_file"],
+        "cv" => $cvPath, // always use the best available
         "email" => $row["email"],
         "phone" => $row["phone"],
         "github" => $row["github"],

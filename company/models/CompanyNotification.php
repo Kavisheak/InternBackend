@@ -239,7 +239,7 @@ class CompanyNotification extends Notification {
             $stmt5->execute([$internshipId]);
             $postReportCount = $stmt5->fetchColumn();
 
-            $postMsg = "Warning: Your internship post '{$title}' has received 5 or more reports!";
+            $postMsg = "Warning: Your internship post '{$title}' has received 5 or more reports! Please review the post and take necessary action to ensure compliance with our guidelines. If you have questions, contact support.";
             $postMsgLike = "%internship post '{$title}' has received 5 or more reports%";
             $stmt6 = $this->db->prepare(
                 "SELECT cn.Company_Notif_Id, cn.Notification_Id
@@ -250,10 +250,11 @@ class CompanyNotification extends Notification {
             $stmt6->execute([$companyId, $postMsgLike]);
             $postNotif = $stmt6->fetch(PDO::FETCH_ASSOC);
 
-            if ($postReportCount >= 5 && !$postNotif) {
+            // Only send when count is exactly 5 and notification does not exist
+            if ($postReportCount == 5 && !$postNotif) {
                 $this->createForCompany($companyId, $postMsg, 'report');
             }
-            // If reports drop below 5, remove warning
+            // If reports drop below 5, remove warning (optional, but keeps things clean)
             if ($postReportCount < 5 && $postNotif) {
                 $stmt7 = $this->db->prepare("DELETE FROM companynotification WHERE Company_Notif_Id = ?");
                 $stmt7->execute([$postNotif['Company_Notif_Id']]);

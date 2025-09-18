@@ -41,7 +41,8 @@ try {
         exit;
     }
 
-    if ($app->apply($studentId, $internshipId)) {
+    $preferredCv = isset($data['preferred_cv']) && $data['preferred_cv'] ? $data['preferred_cv'] : null;
+    if ($app->apply($studentId, $internshipId, $preferredCv)) {
         echo json_encode(["success" => true, "message" => "Application submitted successfully"]);
     } else {
         http_response_code(500);

@@ -64,7 +64,7 @@ class StudentNotification extends Notifications {
                 $message = "📩 Congratulations! Your application has been shortlisted 🎉. We’ll reach out to you with the next steps shortly.";
                 break;
             case "accepted":
-                $message = "📩 Great news! You have been accepted for the internship. Further details regarding onboarding will be shared with you soon.";
+                $message = "📩 Good news! Your application has been accepted. Interview details will be added to your interview dashboard soon — please stay updated..";
                 break;
             case "rejected":
                 $message = "📩 Thank you for your interest in this internship. After careful consideration, we regret to inform you that your application was not selected this time. We encourage you to apply for future opportunities.";

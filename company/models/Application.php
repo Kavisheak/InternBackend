@@ -1,4 +1,3 @@
-
 <?php
 class Application {
     private $db;
@@ -18,7 +17,7 @@ class Application {
     // Get applications for a company (optionally filter by internship)
     public function getApplications($companyId, $internshipId = null) {
         if ($internshipId) {
-            $sql = "SELECT a.*, s.fname, s.lname, s.profile_img, s.cv_file, s.phone, s.github, s.linkedin, s.education, s.experience, s.gender, u.email, i.title AS internship_title
+            $sql = "SELECT a.*, a.cv_url, s.fname, s.lname, s.profile_img, s.cv_file, s.phone, s.github, s.linkedin, s.education, s.experience, s.gender, u.email, i.title AS internship_title
                     FROM application a
                     JOIN student s ON a.Student_Id = s.Student_Id
                     JOIN users u ON s.User_Id = u.User_Id
@@ -28,7 +27,7 @@ class Application {
             $stmt = $this->db->prepare($sql);
             $stmt->execute([$internshipId, $companyId]);
         } else {
-            $sql = "SELECT a.*, s.fname, s.lname, s.profile_img, s.cv_file, s.phone, s.github, s.linkedin, s.education, s.experience, s.gender, u.email, i.title AS internship_title
+            $sql = "SELECT a.*, a.cv_url, s.fname, s.lname, s.profile_img, s.cv_file, s.phone, s.github, s.linkedin, s.education, s.experience, s.gender, u.email, i.title AS internship_title
                     FROM application a
                     JOIN student s ON a.Student_Id = s.Student_Id
                     JOIN users u ON s.User_Id = u.User_Id

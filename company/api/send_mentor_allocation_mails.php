@@ -20,7 +20,7 @@ $db = (new Database())->getConnection();
 // Get all allocations with student and mentor info
 $stmt = $db->prepare("
     SELECT 
-        ma.student_id, ma.mentor_id,
+        ma.student_id, ma.mentor_id, ma.post, ma.mail_sent,
         s.fname AS student_name, u.email AS student_email,
         m.name AS mentor_name, m.email AS mentor_email,
         i.title AS internship_title
@@ -28,9 +28,8 @@ $stmt = $db->prepare("
     JOIN student s ON ma.student_id = s.Student_Id
     JOIN users u ON s.User_Id = u.User_Id
     JOIN mentors m ON ma.mentor_id = m.id
-    JOIN application a ON a.Student_Id = s.Student_Id AND a.status = 'Accepted'
-    JOIN internship i ON a.Internship_Id = i.Internship_Id AND i.Company_Id = ma.company_id
-    WHERE ma.company_id = ?
+    JOIN internship i ON i.title = ma.post AND i.Company_Id = ma.company_id
+    WHERE ma.company_id = ? AND ma.mentor_id IS NOT NULL AND ma.mail_sent = 0
 ");
 $stmt->execute([$companyId]);
 $allocs = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -105,6 +104,10 @@ foreach ($allocs as $row) {
         $mail->Body = $body;
         $mail->send();
         $studentSuccess++;
+
+        // Update mail_sent status
+        $stmtUpdate = $db->prepare("UPDATE mentor_allocations SET mail_sent = 1 WHERE student_id = ? AND mentor_id = ? AND company_id = ? AND post = ?");
+        $stmtUpdate->execute([$row['student_id'], $row['mentor_id'], $companyId, $row['post']]);
     } catch (Exception $e) {
         // log error if needed
     }
